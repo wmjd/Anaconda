@@ -24,7 +24,8 @@ let rec compile_expr (e : expr) (si : int) (env : (string * int) list) : instruc
     | None -> failwith "Unbound id"
     | Some(i) -> [IMov(Reg RAX, stackloc i)] )
 
-(* Tail Recursive implementation needs to *reverse* the instruction list as usual trick. In this case, it is a little tricky because the list, ins, is built hierarchically in sections and subsections which must remain ordered *)
+(* Tail Recursive implementation needs to *reverse* the instruction list as usual trick. 
+In this case, it is a little tricky because ins is built hierarchically in sections and subsections which must remain ordered *)
 and compile_binding b si env = 
   let rec iter b si env ins =
     match b with
@@ -36,8 +37,10 @@ and compile_binding b si env =
   in iter b si env []
 
 and compile_prim1 op e si env =
-  (* TODO *)
-  failwith "Not yet implemented"
+  let arg_is = compile_expr e si env in
+    match op with
+    | Add1 -> arg_is @ [IAdd(Reg RAX, Const 1)]
+    | Sub1 -> arg_is @ [ISub(Reg RAX, Const 1)] 
 
 and compile_prim2 op e1 e2 si env =
   let e1is = compile_expr e1 si env in
@@ -45,8 +48,8 @@ and compile_prim2 op e1 e2 si env =
   let op_is = (
     match op with
     | Plus ->  [IAdd(Reg RAX, stackloc (si + 1))]
- 	| Minus -> [ISub(Reg RAX, stackloc (si + 1))]
-	| Times -> [ISub(Reg RAX, stackloc (si + 1))] )
+    | Minus -> [ISub(Reg RAX, stackloc (si + 1))]
+    | Times -> [ISub(Reg RAX, stackloc (si + 1))] )
   in
     e1is @
     [IMov(stackloc si, Reg RAX)] @
