@@ -35,5 +35,5 @@ let rec parse (sexp : Sexp.t) : Expr.expr =
 
 and parse_binding (binding : Sexp.t) : (string * Expr.expr) list =
   match binding with
-    | List([List([Atom(name); value])]) -> [(name, parse value)]
-    | List((List([Atom(name); value]))::more) -> ( (name, parse value)::(parse_binding (List more)) )
+    | List([List([Atom(name); value])]) -> [(check_reserved name, parse value)]
+    | List((List([Atom(name); value]))::more) -> ((check_reserved name, parse value)::(parse_binding (List more)))
