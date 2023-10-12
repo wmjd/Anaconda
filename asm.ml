@@ -34,7 +34,7 @@ let arg_to_asm (a : arg) : string =
   match a with
   | Const(n) -> sprintf "%d" n
   | Reg(r) -> r_to_asm r
-  | RegOffset(n, r) -> sprintf "[%s - %d]" (r_to_asm r) n
+  | RegOffset(n, r) -> sprintf "[%s + %d]" (r_to_asm r) n
 
 let i_to_asm (i : instruction) : string =
   match i with
@@ -45,7 +45,7 @@ let i_to_asm (i : instruction) : string =
   | ISub(dest, to_sub) ->
     sprintf "  sub %s, %s" (arg_to_asm dest) (arg_to_asm to_sub)
   | IMul(dest, to_mul) ->
-    sprintf "  mul %s, %s" (arg_to_asm dest) (arg_to_asm to_mul)
+    sprintf "  imul %s, %s" (arg_to_asm dest) (arg_to_asm to_mul)
   | ICmp(left, right) ->
     sprintf "  cmp %s, %s" (arg_to_asm left) (arg_to_asm right)
   | ILabel(name) ->

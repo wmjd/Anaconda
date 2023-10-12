@@ -42,5 +42,6 @@ let t_parse_err name program expected =
 
 let myTestList =
   [ (* Fill in your tests here: *)
+    t "one" "1" "1";
   ]
 ;;

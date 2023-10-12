@@ -53,7 +53,7 @@ and compile_prim2 op e1 e2 si env =
     match op with
     | Plus ->  [IAdd(Reg RAX, stackloc (si + 1))]
     | Minus -> [ISub(Reg RAX, stackloc (si + 1))]
-    | Times -> [ISub(Reg RAX, stackloc (si + 1))] )
+    | Times -> [IMul(Reg RAX, stackloc (si + 1))] )
   in
     e1is @
     [IMov(stackloc si, Reg RAX)] @
