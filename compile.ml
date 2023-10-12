@@ -21,7 +21,7 @@ let rec compile_expr (e : expr) (si : int) (env : (string * int) list) : instruc
   | ENumber(i) -> [IMov(Reg RAX, Const i)]
   | EId(x) -> (
     match find env x with
-    | None -> failwith "Unbound id"
+    | None -> failwith ("Unbound variable identifier " ^ x)
     | Some(i) -> [IMov(Reg RAX, stackloc i)] )
 
 (* Tail Recursive implementation needs to *reverse* the instruction list as usual trick. 
