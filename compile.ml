@@ -27,10 +27,14 @@ let rec compile_expr (e : expr) (si : int) (env : (string * int) list) : instruc
 (* Tail Recursive implementation needs to *reverse* the instruction list as usual trick. 
 In this case, it is a little tricky because ins is built hierarchically in sections and subsections which must remain ordered *)
 and compile_binding b si env = 
-  let rec iter b si env ins =
+  let rec check_dup b x =
+    match b with
+    | [] -> false
+    | (x_prime, v)::more -> if x_prime = x then true else check_dup more x   
+  in let rec iter b si env ins =
     match b with
     | [] -> (List.rev ins, env)
-    | (x,v)::more -> (
+    | (x,v)::more -> (if (check_dup more x) then failwith "Duplicate binding" else
       let vis = compile_expr v si env in 
       let sis = [IMov(stackloc si, Reg RAX)] in
       iter more (si+1) ((x,si)::env) (sis @ (List.rev vis) @ ins) ) 
