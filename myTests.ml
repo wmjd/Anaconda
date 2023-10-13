@@ -43,5 +43,17 @@ let t_parse_err name program expected =
 let myTestList =
   [ (* Fill in your tests here: *)
     t "one" "1" "1";
+    t "101" "(let ((x (+ 99 (+ 1 1))) (y 22) (z 11)) x)" "101";
+    t "102" "(let ((x (+ 99 (+ 1 1))) (y (+ x 22)) (z 11)) (add1 x))" "102";
+    t "99" "(let ((x 99) (y 22) (z 11)) x)" "99";
+    t "scope" "(let ((x 99) (y (+ 1 x))) y)" "100";    
+    t "big_nest" "(let ((x (+ 1 -1)) (y (let ((a x)) (+ a x)))) (+ x y))" "0";
+    t_err "dup_err" "(let ((x 99) (x 22) (z 11)) x)" "Duplicate binding";
+    t_err "unbound_err" "(let ((x 99) (y 22) (z 11)) a)" "Unbound variable identifier a";
+    (* the remaining tests report incorrectly even though they are patterned off working t_err 
+       i.e., dub_err, unbound_err work just fine 
+       might have something to do with where (file) the exception is raised *)
+    t_err "empty_prog" "()" "Parse error"; 
+    t_err "reserved_word" "(let ((let 99) (y 22) (z 11)) y)" "Syntax error: let is a reserved word";
   ]
 ;;
